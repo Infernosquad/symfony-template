@@ -1,10 +1,3 @@
-#syntax=docker/dockerfile:1.4
-
-# The different stages of this Dockerfile are meant to be built into separate images
-# https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
-# https://docs.docker.com/compose/compose-file/#target
-
-# Prod image
 FROM php:8.1-fpm-alpine AS symfony_php_build
 
 ENV APP_ENV=prod
@@ -22,6 +15,7 @@ RUN apk add --no-cache \
         postgresql-dev \
 		gettext \
 		git \
+		autoconf \
 	;
 
 RUN set -eux; \
@@ -31,10 +25,8 @@ RUN set -eux; \
     	pdo_pgsql \
     	apcu \
 		opcache \
+    	redis \
     ;
-
-###> recipes ###
-###< recipes ###
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY --link docker/php/conf.d/app.ini $PHP_INI_DIR/conf.d/

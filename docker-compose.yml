@@ -2,6 +2,8 @@ version: "3.4"
 
 services:
   php:
+    depends_on:
+      - redis
     build:
       context: .
       target: symfony_php
@@ -13,13 +15,17 @@ services:
       timeout: 3s
       retries: 3
       start_period: 30s
-    environment:
-      # Run "composer require symfony/orm-pack" to install and configure Doctrine ORM
-      DATABASE_URL: postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-app}?serverVersion=${POSTGRES_VERSION:-14}
-      # Run "composer require symfony/mercure-bundle" to install and configure the Mercure integration
-      MERCURE_URL: ${CADDY_MERCURE_URL:-http://caddy/.well-known/mercure}
-      MERCURE_PUBLIC_URL: https://${SERVER_NAME:-localhost}/.well-known/mercure
-      MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
+  php_workers:
+    depends_on:
+      - redis
+    image: symfony-template_php
+    command: bin/console messenger:consume async
+    restart: unless-stopped
+    healthcheck:
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
 
   caddy:
     build:
@@ -59,6 +65,9 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-app}
     volumes:
       - db_data:/var/lib/postgresql/data:rw
+  redis:
+    image: redis
+    restart: unless-stopped
 
 volumes:
   php_socket:
