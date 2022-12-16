@@ -26,6 +26,12 @@ services:
     volumes:
       - ./public:/srv/app/public:ro
       - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+  database:
+    ports:
+      - "5432:5432"
+  redis:
+    ports:
+      - "6379:6379"
   node:
     image: node:18-alpine
     working_dir: /srv/app
