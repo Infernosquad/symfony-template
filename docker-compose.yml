@@ -22,6 +22,7 @@ services:
     command: bin/console messenger:consume async
     restart: unless-stopped
     healthcheck:
+      test: ['CMD','true']
       interval: 10s
       timeout: 3s
       retries: 3
