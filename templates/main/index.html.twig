@@ -14,7 +14,12 @@
         <p>Email: {{ app.user.email }}</p>
     {% endif %}
 
+    <h2 {{ turbo_stream_listen('chat') }}>
 
+    </h2>
+
+    <turbo-frame id="test" >
+    </turbo-frame>
     This friendly message is coming from:
     <ul>
         <li>Your controller at <code><a href="{{ '/srv/app/src/Controller/MainController.php'|file_link(0) }}">src/Controller/MainController.php</a></code></li>

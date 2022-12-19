@@ -6,19 +6,23 @@ services:
       target: symfony_php_dev
     volumes:
       - ./:/srv/app
+      - ./crontab.conf:/etc/cron.d/app
       - ./docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
     environment:
       XDEBUG_MODE: "${XDEBUG_MODE:-off}"
     extra_hosts:
       - host.docker.internal:host-gateway
-  php_workers:
-    build:
-      target: symfony_php_dev
+  workers:
     volumes:
       - ./:/srv/app
       - ./docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
-    environment:
-      XDEBUG_MODE: "${XDEBUG_MODE:-off}"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+  cron:
+    volumes:
+      - ./:/srv/app
+      - ./docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
+      - ./crontab.conf:/etc/cron.d/root:ro
     extra_hosts:
       - host.docker.internal:host-gateway
 

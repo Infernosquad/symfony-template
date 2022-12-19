@@ -2,6 +2,8 @@ version: "3.4"
 
 services:
   php:
+    volumes:
+      - uploads:/srv/app
     environment:
       APP_SECRET: ${APP_SECRET}
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET}
@@ -10,3 +12,6 @@ services:
     environment:
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
+
+volumes:
+  uploads:

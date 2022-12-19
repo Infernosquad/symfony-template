@@ -4,6 +4,7 @@ services:
   php:
     depends_on:
       - redis
+      - database
     build:
       context: .
       target: symfony_php
@@ -15,11 +16,26 @@ services:
       timeout: 3s
       retries: 3
       start_period: 30s
-  php_workers:
+  workers:
     depends_on:
-      - redis
-    image: symfony-template_php
-    command: bin/console messenger:consume async
+      - php
+    build:
+      target: symfony_php_worker
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD','true']
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+    deploy:
+      mode: replicated
+      replicas: 3
+  cron:
+    depends_on:
+      - php
+    build:
+      target: symfony_php_cron
     restart: unless-stopped
     healthcheck:
       test: ['CMD','true']
@@ -36,8 +52,8 @@ services:
       - php
     environment:
       SERVER_NAME: ${SERVER_NAME:-localhost, caddy:80}
-      MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
-      MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
+      MERCURE_PUBLISHER_JWT_KEY: ${APP_SECRET}
+      MERCURE_SUBSCRIBER_JWT_KEY: ${APP_SECRET}
     restart: unless-stopped
     volumes:
       - php_socket:/var/run/php
