@@ -48,6 +48,10 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
+        "codeception/codeception": "^5.0",
+        "codeception/module-asserts": "^3.0",
+        "codeception/module-phpbrowser": "^3.0",
+        "codeception/module-symfony": "^3.1",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "friendsofphp/php-cs-fixer": "^3.13",
         "phpunit/phpunit": "^9.5",
@@ -103,6 +107,9 @@
         ],
         "cs-fix": [
             "vendor/bin/php-cs-fixer fix src"
+        ],
+        "test": [
+            "vendor/bin/codecept run"
         ]
     },
     "conflict": {
