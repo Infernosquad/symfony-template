@@ -6,7 +6,6 @@ services:
       target: symfony_php_dev
     volumes:
       - ./:/srv/app
-      - ./crontab.conf:/etc/cron.d/app
       - ./docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
     environment:
       XDEBUG_MODE: "${XDEBUG_MODE:-off}"
@@ -36,8 +35,11 @@ services:
   redis:
     ports:
       - "6379:6379"
+
   node:
-    image: node:18-alpine
-    working_dir: /srv/app
+    build:
+      context: .
+      target: symfony_node
     volumes:
       - ./:/srv/app
+    command: 'yarn encore dev --watch'

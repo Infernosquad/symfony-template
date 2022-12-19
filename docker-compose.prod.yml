@@ -12,6 +12,10 @@ services:
     environment:
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
+  workers:
+    deploy:
+      mode: replicated
+      replicas: 3
 
 volumes:
   uploads:

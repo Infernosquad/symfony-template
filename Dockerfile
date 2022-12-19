@@ -50,10 +50,11 @@ FROM node:18-alpine AS symfony_node
 WORKDIR /srv/app
 COPY --from=symfony_php_build /srv/app .
 RUN yarn install
-RUN yarn encore production
+RUN yarn run build
 
 FROM symfony_php_build AS symfony_php
-COPY --from=symfony_node /srv/app/public/build public/build
+WORKDIR /srv/app
+COPY --from=symfony_node /srv/app/public/build /srv/app/public/build
 RUN mkdir -p /var/run/php
 COPY  docker/php/docker-healthcheck.sh /usr/local/bin/docker-healthcheck
 RUN chmod +x /usr/local/bin/docker-healthcheck
