@@ -50,7 +50,7 @@ FROM node:18-alpine AS symfony_node
 WORKDIR /srv/app
 COPY --from=symfony_php_build /srv/app .
 RUN yarn install
-RUN yarn run build
+RUN yarn encore production
 
 FROM symfony_php_build AS symfony_php
 COPY --from=symfony_node /srv/app/public/build public/build

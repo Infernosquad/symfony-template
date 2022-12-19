@@ -26,6 +26,4 @@ jobs:
                   done
                   exit 1
             - name: Check HTTP reachability
-              run: curl http://localhost
-            - name: Check HTTPS reachability
-              run: curl -k https://localhost
+              run: docker compose up run composer test
