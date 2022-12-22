@@ -22,24 +22,12 @@ services:
     build:
       target: symfony_php_worker
     restart: unless-stopped
-    healthcheck:
-      test: ['CMD','true']
-      interval: 10s
-      timeout: 3s
-      retries: 3
-      start_period: 30s
   cron:
     depends_on:
       - php
     build:
       target: symfony_php_cron
     restart: unless-stopped
-    healthcheck:
-      test: ['CMD','true']
-      interval: 10s
-      timeout: 3s
-      retries: 3
-      start_period: 30s
 
   caddy:
     build:
