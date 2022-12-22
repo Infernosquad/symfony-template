@@ -26,4 +26,4 @@ jobs:
                   done
                   exit 1
             - name: Check HTTP reachability
-              run: docker compose run php composer test
+              run: docker compose run php /srv/app/vendor/bin/codecept run acceptance --steps --debug
