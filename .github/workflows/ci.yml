@@ -20,10 +20,10 @@ jobs:
                 target: symfony_php
                 tags: test-image:latest
                 push: false
-            - uses: addnab/docker-run-action@v3
-              with:
-                image: test-image:latest
-                run: /usr/bin/composer test
+#            - uses: addnab/docker-run-action@v3
+#              with:
+#                image: test-image:latest
+#                run: /usr/bin/composer test
             - name: Log in to Docker Hub
               uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
               with:
