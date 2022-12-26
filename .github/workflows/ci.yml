@@ -8,53 +8,48 @@ jobs:
     build:
         name: Docker build
         runs-on: ubuntu-latest
+
         steps:
             - name: Checkout
               uses: actions/checkout@v3
-            - name: Pull images
-              run: docker compose pull
-            - name: Start services
-              run: docker compose -f docker-compose.yml up  --build -d
-            - name: Wait for services
-              run: |
-                  while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker compose ps -q php)")"; do
-                    case $status in
-                      starting) sleep 1;;
-                      healthy) exit 0;;
-                      unhealthy) exit 1;;
-                    esac
-                  done
-                  exit 1
-            - name: Check HTTP reachability
-              run: docker compose exec php composer test
+            - uses: docker/build-push-action@v3.2.0
+              with:
+                context: .
+                target: symfony_php
+                tags: test-image:latest
+                push: false
+            - uses: addnab/docker-run-action@v3
+              with:
+                image: test-image:latest
+                run: /ur/bin/composer test
             - name: Log in to Docker Hub
               uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
               with:
                 username: ${{ secrets.DOCKER_USERNAME }}
                 password: ${{ secrets.DOCKER_PASSWORD }}
             - name: Extract metadata (tags, labels) for Docker
-              id: meta
+              id: meta_php
               uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
               with:
                 images: ${{ secrets.DOCKER_REGISTRY }}-php
             - name: Build and push Docker image (php)
-              uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+              uses: docker/build-push-action@v3.2.0
               with:
                 context: .
                 target: symfony_php
                 push: true
-                tags: ${{ steps.meta.outputs.tags }}
-                labels: ${{ steps.meta.outputs.labels }}
+                tags: ${{ steps.meta_php.outputs.tags }}
+                labels: ${{ steps.meta_php.outputs.labels }}
             - name: Extract metadata (tags, labels) for Docker
-              id: meta
+              id: meta_caddy
               uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
               with:
                 images: ${{ secrets.DOCKER_REGISTRY }}-caddy
             - name: Build and push Docker image (caddy)
-              uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+              uses: docker/build-push-action@v3.2.0
               with:
                 context: .
                 target: app_caddy
                 push: true
-                tags: ${{ steps.meta.outputs.tags }}
-                labels: ${{ steps.meta.outputs.labels }}
+                tags: ${{ steps.meta_caddy.outputs.tags }}
+                labels: ${{ steps.meta_caddy.outputs.labels }}
