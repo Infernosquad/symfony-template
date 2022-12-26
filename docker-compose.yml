@@ -12,6 +12,7 @@ services:
     volumes:
       - php_socket:/var/run/php
     healthcheck:
+      test: '/usr/local/bin/docker-healthcheck'
       interval: 10s
       timeout: 3s
       retries: 3
@@ -20,13 +21,17 @@ services:
     depends_on:
       - php
     build:
-      target: symfony_php_worker
+      context: .
+      target: symfony_php
+    command: '/srv/app/bin/console messenger:consume async'
     restart: unless-stopped
   cron:
+    command: 'crond -f -l 2 -L /dev/stdout'
     depends_on:
       - php
     build:
-      target: symfony_php_cron
+      context: .
+      target: symfony_php
     restart: unless-stopped
 
   caddy:

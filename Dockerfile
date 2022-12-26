@@ -26,6 +26,8 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY  docker/php/conf.d/app.ini $PHP_INI_DIR/conf.d/
 COPY  docker/php/conf.d/app.prod.ini $PHP_INI_DIR/conf.d/
 COPY  docker/php/php-fpm.d/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
+COPY crontab.conf /etc/cron.d/root
+RUN crontab -u root /etc/cron.d/root
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PATH="${PATH}:/root/.composer/vendor/bin"
 COPY --from=composer/composer:2-bin  /composer /usr/bin/composer
@@ -45,6 +47,10 @@ RUN set -eux; \
 		composer run-script post-install-cmd; \
 		chmod +x bin/console; sync; \
     fi
+COPY  docker/php/docker-healthcheck.sh /usr/local/bin/docker-healthcheck
+COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+RUN chmod +x /usr/local/bin/docker-entrypoint
+ENTRYPOINT ["docker-entrypoint"]
 
 FROM node:18-alpine AS symfony_node
 WORKDIR /srv/app
@@ -56,12 +62,6 @@ FROM symfony_php_build AS symfony_php
 WORKDIR /srv/app
 COPY --from=symfony_node /srv/app/public/build /srv/app/public/build
 RUN mkdir -p /var/run/php
-COPY  docker/php/docker-healthcheck.sh /usr/local/bin/docker-healthcheck
-RUN chmod +x /usr/local/bin/docker-healthcheck
-HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD ["docker-healthcheck"]
-COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
-RUN chmod +x /usr/local/bin/docker-entrypoint
-ENTRYPOINT ["docker-entrypoint"]
 CMD ["php-fpm"]
 
 # Dev image
@@ -90,10 +90,3 @@ WORKDIR /srv/app
 COPY --from=app_caddy_builder /usr/bin/caddy /usr/bin/caddy
 COPY --from=symfony_php  /srv/app/public public/
 COPY docker/caddy/Caddyfile /etc/caddy/Caddyfile
-
-FROM symfony_php_build AS symfony_php_worker
-CMD ["/srv/app/bin/console", "messenger:consume", "async"]
-
-FROM symfony_php_build AS symfony_php_cron
-COPY crontab.conf /etc/cron.d/root
-CMD crontab -u root /etc/cron.d/root && crond -f -l 2 -L /dev/stdout

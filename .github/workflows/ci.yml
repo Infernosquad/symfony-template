@@ -36,11 +36,25 @@ jobs:
               id: meta
               uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
               with:
-                images: ${{ secrets.DOCKER_REGISTRY }}
-            - name: Build and push Docker image
+                images: ${{ secrets.DOCKER_REGISTRY }}-php
+            - name: Build and push Docker image (php)
               uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
               with:
                 context: .
+                target: symfony_php
+                push: true
+                tags: ${{ steps.meta.outputs.tags }}
+                labels: ${{ steps.meta.outputs.labels }}
+            - name: Extract metadata (tags, labels) for Docker
+              id: meta
+              uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+              with:
+                images: ${{ secrets.DOCKER_REGISTRY }}-caddy
+            - name: Build and push Docker image (caddy)
+              uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+              with:
+                context: .
+                target: app_caddy
                 push: true
                 tags: ${{ steps.meta.outputs.tags }}
                 labels: ${{ steps.meta.outputs.labels }}
