@@ -8,7 +8,7 @@ jobs:
   deploy:
     name: Install docker and deploy
     runs-on: ubuntu-latest
-    after: build
+    needs: [build]
     steps:
       - name: copy file via ssh password
         uses: appleboy/scp-action@master
