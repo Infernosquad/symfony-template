@@ -40,7 +40,7 @@ jobs:
           host: ${{ vars.HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: HOST,APP_ENV,CADDY_MERCURE_JWT_SECRET,APP_SECRET,DATABASE_URL
+          envs: HOST,APP_ENV,CADDY_MERCURE_JWT_SECRET,APP_SECRET,DATABASE_URL,DOCKER_REGISTRY
           script: |
             if [[ $(which docker) == "" ]]; then
               sudo apt-get update
