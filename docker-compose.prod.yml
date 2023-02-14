@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   php:
-    image: ${DOCKER_REGISTRY}-symfony/php:${DOCKER_TAG:-latest}
+    image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
     volumes:
       - uploads:/srv/app
     environment:
