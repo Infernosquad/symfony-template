@@ -35,6 +35,7 @@ jobs:
           CADDY_MERCURE_JWT_SECRET: ${{ secrets.CADDY_MERCURE_JWT_SECRET }}
           APP_SECRET: ${{ secrets.APP_SECRET }}
           DATABASE_URL: 'postgresql://app:${{ secrets.POSTGRES_PASSWORD }}!@database:5432/app?serverVersion=14&charset=utf8'
+          DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
         with:
           host: ${{ vars.HOST }}
           username: ${{ secrets.SSH_USER }}
