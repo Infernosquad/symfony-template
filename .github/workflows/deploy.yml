@@ -53,3 +53,4 @@ jobs:
               sudo apt-get install -y docker-compose
             fi
             cd /var/www && docker-compose -f docker-compose.yml -f docker-compose.prod.yml  pull && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+            sudo docker rm $(sudo docker images -q -a)
