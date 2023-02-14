@@ -24,7 +24,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: 22
-          source: "docker-compose.yml,docker-compose.prod.yml"
+          source: "."
           target: "/var/www"
       - name: Deploy to Digital Ocean droplet via SSH action
         uses: appleboy/ssh-action@master
