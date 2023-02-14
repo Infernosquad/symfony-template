@@ -1,16 +1,20 @@
 name: Deploy
 
 on:
-  workflow_run:
-    workflows: ["Build"]
-    branches: [main]
-    types:
-      - completed
+  push:
+  pull_request:
+#on:
+#  workflow_run:
+#    workflows: ["Build"]
+#    branches: [main]
+#    types:
+#      - completed
 
 jobs:
   deploy:
     name: Install docker and deploy
     runs-on: ubuntu-latest
+    environment: production
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: copy file via ssh password
