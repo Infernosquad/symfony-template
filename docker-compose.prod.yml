@@ -15,9 +15,12 @@ services:
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
   workers:
+    image: ${DOCKER_REGISTRY}-symfony/php:${DOCKER_TAG:-latest}
     deploy:
       mode: replicated
       replicas: 3
+  cron:
+    image: ${DOCKER_REGISTRY}-symfony/php:${DOCKER_TAG:-latest}
 
 volumes:
   uploads:
