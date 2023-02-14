@@ -32,6 +32,7 @@ jobs:
           host: ${{ vars.HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
+          envs: HOST,APP_ENV,CADDY_MERCURE_JWT_SECRET,APP_SECRET,DATABASE_URL
           script: |
             if [[ $(which docker) == "" ]]; then
               sudo apt-get update
@@ -41,7 +42,12 @@ jobs:
               sudo apt-get update
               apt-cache policy docker-ce
               sudo apt-get install -y docker-ce
-              sudo systemctl status docker
               sudo apt-get install -y docker-compose
             fi
             cd /var/www && docker-compose pull && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+          environment:
+            HOST: ${{ vars.HOST }}
+            APP_ENV: ${{ vars.APP_ENV }}
+            CADDY_MERCURE_JWT_SECRET: ${{ secrets.CADDY_MERCURE_JWT_SECRET }}
+            APP_SECRET: ${{ secrets.APP_SECRET }}
+            DATABASE_URL: 'postgresql://app:${{ secrets.POSTGRES_PASSWORD }}!@database:5432/app?serverVersion=14&charset=utf8'
