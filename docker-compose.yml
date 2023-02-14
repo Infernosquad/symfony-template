@@ -26,9 +26,6 @@ services:
     restart: unless-stopped
 
   caddy:
-    build:
-      context: .
-      target: app_caddy
     depends_on:
       - php
     environment:

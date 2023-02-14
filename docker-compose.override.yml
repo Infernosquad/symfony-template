@@ -33,6 +33,9 @@ services:
       - host.docker.internal:host-gateway
 
   caddy:
+    build:
+      context: .
+      target: app_caddy
     volumes:
       - ./public:/srv/app/public:ro
       - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro

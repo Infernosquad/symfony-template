@@ -52,4 +52,4 @@ jobs:
               sudo apt-get install -y docker-ce
               sudo apt-get install -y docker-compose
             fi
-            cd /var/www && docker-compose pull && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+            cd /var/www && docker-compose -f docker-compose.yml -f docker-compose.prod.yml  pull && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
