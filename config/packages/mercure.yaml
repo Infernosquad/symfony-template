@@ -4,5 +4,5 @@ mercure:
             url: 'http://caddy/.well-known/mercure'
             public_url: 'https://%env(HOST)%/.well-known/mercure'
             jwt:
-                secret: '%env(APP_SECRET)%'
+                secret: '%env(CADDY_MERCURE_JWT_SECRET)%'
                 publish: '*'

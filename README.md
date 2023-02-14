@@ -25,15 +25,15 @@ This template includes following features:
 
 ## Deployment
 
-To create server, use terraform
+Only once, create SSH keys for the server and paste to github as SSH_KEY
+
+ssh-keygen -t rsa -b 4096 -C "test@example.com" -f key
+
+cat key.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 
 **ON THE LOCAL**
 
-`cd deployment`
-
-`terraform init`
-
-`terraform apply`
+`ansible playbook.yml -i inventory`
 
 
 
