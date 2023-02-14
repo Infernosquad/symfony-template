@@ -5,9 +5,6 @@ services:
     depends_on:
       - redis
       - database
-    build:
-      context: .
-      target: symfony_php
     restart: unless-stopped
     volumes:
       - php_socket:/var/run/php
@@ -20,18 +17,12 @@ services:
   workers:
     depends_on:
       - php
-    build:
-      context: .
-      target: symfony_php
     command: '/srv/app/bin/console messenger:consume async'
     restart: unless-stopped
   cron:
     command: 'crond -f -l 2 -L /dev/stdout'
     depends_on:
       - php
-    build:
-      context: .
-      target: symfony_php
     restart: unless-stopped
 
   caddy:
