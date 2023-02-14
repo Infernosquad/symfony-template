@@ -10,7 +10,7 @@ services:
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET}
 
   caddy:
-    image: ${DOCKER_REGISTRY}-caddy/php:${DOCKER_TAG:-main}
+    image: ${DOCKER_REGISTRY}-caddy:${DOCKER_TAG:-main}
     environment:
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
