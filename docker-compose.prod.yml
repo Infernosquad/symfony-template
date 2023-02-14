@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   php:
-    image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-main}
+    image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
     volumes:
       - uploads:/srv/app
     environment:
@@ -10,17 +10,17 @@ services:
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET}
 
   caddy:
-    image: ${DOCKER_REGISTRY}-caddy:${DOCKER_TAG:-main}
+    image: ${DOCKER_REGISTRY}-caddy:${DOCKER_TAG:-latest}
     environment:
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
   workers:
-    image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-main}
+    image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
     deploy:
       mode: replicated
       replicas: 3
   cron:
-    image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-main}
+    image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
 
 volumes:
   uploads:
