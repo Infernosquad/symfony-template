@@ -29,7 +29,7 @@ jobs:
       - name: Deploy to Digital Ocean droplet via SSH action
         uses: appleboy/ssh-action@master
         env:
-          ENV_FILE: ${{ secrets.ENV_FILE }}
+          ENV_FILE: ${{ vars.ENV_FILE }}
           DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -46,7 +46,7 @@ jobs:
               sudo apt-get install -y docker-ce
               sudo apt-get install -y docker-compose
             fi
-            echo "${{ secrets.ENV_FILE }}" > /var/www/.env
+            echo "${{ vars.ENV_FILE }}" > /var/www/.env
             echo "DOCKER_REGISTRY=${{ secrets.DOCKER_REGISTRY }}" >> /var/www/.env
             source /var/www/.env
             cd /var/www && docker-compose -f docker-compose.yml -f docker-compose.prod.yml  pull && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --force-recreate -d 
