@@ -16,7 +16,6 @@ This template includes following features:
 * Symfony Mailer Asynchronous
 * Symfony Webpack Encore
 * Cron Jobs Container
-* Symfony Secrets
 * Codeception Testing
 
 ## Installation
@@ -25,15 +24,27 @@ This template includes following features:
 
 ## Deployment
 
-Only once, create SSH keys for the server and paste to github as SSH_KEY
+Tested with Ubuntu 22.04. These steps are required to do only once. After that code will be deployed automatically on push to main branch.
 
-ssh-keygen -t rsa -b 4096 -C "test@example.com" -f key
+Create SSH keys for the server and paste to github as SSH_KEY
 
-cat key.pub | ssh b@B 'cat >> .ssh/authorized_keys'
+`ssh-keygen -t rsa -b 4096 -C "test@example.com" -f key`
 
-**ON THE LOCAL**
+`cat key.pub | ssh b@B 'cat >> .ssh/authorized_keys'`
 
-`ansible playbook.yml -i inventory`
+#### Add GITHUB_SECRETS
 
+Environment: `SSH_HOST, SSH_USER, SSH_KEY`
+Global: `DOCKER_REGISTRY, DOCKER_REGISTRY_USER, DOCKER_REGISTRY_PASSWORD`
 
+#### Add Github Environment Variable
 
+ENV_FILE
+
+```
+APP_ENV=prod
+HOST=<your host>
+POSTGRES_PASSWORD=<your password>
+APP_SECRET=<your secret>
+CADDY_MERCURE_JWT_SECRET=<your-jwt-secret>
+````
