@@ -50,6 +50,6 @@ jobs:
             echo "${{ vars.ENV_FILE }}" > /var/www/.env
             mv /var/www/docker-compose.prod.yml /var/www/docker-compose.override.yml
             echo "DOCKER_REGISTRY=${{ secrets.DOCKER_REGISTRY }}" >> /var/www/.env
-            cd /var/www && docker-compose pull && docker-compose --env-file ./.env up -d 
+            cd /var/www && docker-compose pull && docker-compose up -d 
             sudo docker image prune -f
             docker-compose exec -T php bin/console doctrine:migrations:migrate --no-interaction
