@@ -5,7 +5,9 @@ namespace App\Security;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -32,7 +34,12 @@ class UserProvider implements UserProviderInterface
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
         }
 
-        return $this->manager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
+        return $this->findUser(['email' => $user->getEmail()]);
+    }
+
+    protected function findUser(array $criteria): ?User
+    {
+        return $this->manager->getRepository(User::class)->findOneBy($criteria);
     }
 
     public function supportsClass(string $class): bool
