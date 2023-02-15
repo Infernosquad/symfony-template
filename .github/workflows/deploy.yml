@@ -20,8 +20,8 @@ jobs:
       - name: copy file via ssh password
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: 22
           source: "docker-compose.yml,docker-compose.prod.yml"
@@ -32,8 +32,8 @@ jobs:
           ENV_FILE: ${{ secrets.ENV_FILE }}
           DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           envs: ENV_FILE,DOCKER_REGISTRY
           script: |
