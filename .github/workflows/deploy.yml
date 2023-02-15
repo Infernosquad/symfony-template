@@ -27,7 +27,7 @@ jobs:
           source: "docker-compose.yml,docker-compose.prod.yml"
           target: "/var/www"
       - name: Deploy to Digital Ocean droplet via SSH action
-        uses: appleboy/ssh-action@v0.1.7
+        uses: appleboy/ssh-action@v0.1.6
         env:
           ENV_FILE: ${{ secrets.ENV_FILE }}
           DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
