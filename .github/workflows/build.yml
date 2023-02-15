@@ -27,6 +27,8 @@ jobs:
               with:
                 context: .
                 target: symfony_php
+                cache-from: type=gha
+                cache-to: type=gha,mode=max
                 push: true
                 tags: ${{ steps.meta_php.outputs.tags }}
                 labels: ${{ steps.meta_php.outputs.labels }}
@@ -41,5 +43,7 @@ jobs:
                 context: .
                 target: app_caddy
                 push: true
+                cache-from: type=gha
+                cache-to: type=gha,mode=max
                 tags: ${{ steps.meta_caddy.outputs.tags }}
                 labels: ${{ steps.meta_caddy.outputs.labels }}
