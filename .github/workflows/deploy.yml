@@ -53,4 +53,3 @@ jobs:
             echo "DOCKER_REGISTRY=${{ secrets.DOCKER_REGISTRY }}" >> /var/www/.env
             cd /var/www && docker-compose pull && docker-compose up -d 
             sudo docker image prune -f
-            docker-compose exec -T php bin/console doctrine:migrations:migrate --no-interaction

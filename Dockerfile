@@ -1,36 +1,14 @@
-FROM php:8.1-fpm-alpine AS symfony_php_build
+FROM infernosquad/php:v0.1 AS symfony_php_build
 
 ENV APP_ENV=prod
 WORKDIR /srv/app
-# php extensions installer: https://github.com/mlocati/docker-php-extension-installer
-COPY --from=mlocati/php-extension-installer  /usr/bin/install-php-extensions /usr/local/bin/
-RUN apk add --no-cache \
-		acl \
-		fcgi \
-		file \
-        postgresql-dev \
-		gettext \
-		git \
-		autoconf \
-	;
-RUN set -eux; \
-    install-php-extensions \
-    	intl \
-    	zip \
-    	pdo_pgsql \
-    	apcu \
-		opcache \
-    	redis \
-    ;
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY  docker/php/conf.d/app.ini $PHP_INI_DIR/conf.d/
 COPY  docker/php/conf.d/app.prod.ini $PHP_INI_DIR/conf.d/
 COPY  docker/php/php-fpm.d/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 COPY crontab.conf /etc/cron.d/root
 RUN crontab -u root /etc/cron.d/root
-ENV COMPOSER_ALLOW_SUPERUSER=1
-ENV PATH="${PATH}:/root/.composer/vendor/bin"
-COPY --from=composer/composer:2-bin  /composer /usr/bin/composer
+
 COPY composer.* symfony.* ./
 RUN set -eux; \
     if [ -f composer.json ]; then \
@@ -75,17 +53,8 @@ RUN set -eux; \
 	install-php-extensions xdebug
 RUN rm -f .env.local.php
 
-# Build Caddy with the Mercure and Vulcain modules
-FROM caddy:2.6-builder-alpine AS app_caddy_builder
-RUN xcaddy build \
-	--with github.com/dunglas/mercure \
-	--with github.com/dunglas/mercure/caddy \
-	--with github.com/dunglas/vulcain \
-	--with github.com/dunglas/vulcain/caddy
-
 # Caddy image
-FROM caddy:2.6-alpine AS app_caddy
+FROM infernosquad/caddy:v0.1 AS app_caddy
 WORKDIR /srv/app
-COPY --from=app_caddy_builder /usr/bin/caddy /usr/bin/caddy
 COPY --from=symfony_php  /srv/app/public public/
 COPY docker/caddy/Caddyfile /etc/caddy/Caddyfile

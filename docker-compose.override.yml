@@ -36,6 +36,8 @@ services:
     build:
       context: .
       target: app_caddy
+    environment:
+      SERVER_NAME: ":80"
     volumes:
       - ./public:/srv/app/public:ro
       - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro

@@ -2,7 +2,13 @@ mercure:
     hubs:
         default:
             url: 'http://caddy/.well-known/mercure'
-            public_url: 'https://%env(HOST)%/.well-known/mercure'
+            public_url: 'http://%env(HOST)%/.well-known/mercure'
             jwt:
                 secret: '%env(CADDY_MERCURE_JWT_SECRET)%'
                 publish: '*'
+when@prod:
+    mercure:
+        hubs:
+            default:
+                url: 'https://%env(HOST)%/.well-known/mercure'
+                public_url: 'https://%env(HOST)%/.well-known/mercure'
