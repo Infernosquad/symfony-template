@@ -1,3 +1,7 @@
-<turbo-frame action="replace" target="test" >
-    {{ random(1, 1000) }}
-</turbo-frame>
+<turbo-stream action="replace" target="chat" >
+     <template>
+         <div>
+             This is generated from cron using async job: {{ 'now'|date('Y-m-d H:i:s') }}
+         </div>
+    </template>
+</turbo-stream>

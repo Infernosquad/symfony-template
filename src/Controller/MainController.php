@@ -13,6 +13,7 @@ class MainController extends AbstractController
     public function index(MessageBusInterface $messageBus): Response
     {
         return $this->render('main/index.html.twig', [
+            'tz' => date_default_timezone_get(),
         ]);
     }
 
