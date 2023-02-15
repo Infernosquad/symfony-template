@@ -19,11 +19,17 @@ services:
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
   workers:
     image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
+    volumes:
+      - uploads:/srv/app/public/uploads
+      - ./.env:/srv/app/.env.local
     deploy:
       mode: replicated
       replicas: 3
   cron:
     image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
+    volumes:
+      - uploads:/srv/app/public/uploads
+      - ./.env:/srv/app/.env.local
 
 volumes:
   uploads:
