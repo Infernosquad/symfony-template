@@ -4,7 +4,7 @@ services:
   php:
     image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
     volumes:
-      - uploads:/srv/app
+      - uploads:/srv/app/public/uploads
       - ./.env:/srv/app/.env.local
     environment:
       APP_SECRET: ${APP_SECRET}
@@ -12,6 +12,8 @@ services:
 
   caddy:
     image: ${DOCKER_REGISTRY}-caddy:${DOCKER_TAG:-latest}
+    volumes:
+      - uploads:/srv/app/public/uploads
     environment:
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
