@@ -1,18 +1,20 @@
 name: Deploy
 
 on:
-  workflow_run:
-    workflows: ["Build"]
-    branches: [main]
-    types:
-      - completed
+  push:
+#on:
+#  workflow_run:
+#    workflows: ["Build"]
+#    branches: [main]
+#    types:
+#      - completed
 
 jobs:
   deploy:
     name: Install docker and deploy
     runs-on: ubuntu-latest
     environment: production
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+#    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v2
       - name: copy file via ssh password
@@ -27,17 +29,12 @@ jobs:
       - name: Deploy to Digital Ocean droplet via SSH action
         uses: appleboy/ssh-action@master
         env:
-          HOST: ${{ vars.HOST }}
-          APP_ENV: ${{ vars.APP_ENV }}
-          CADDY_MERCURE_JWT_SECRET: ${{ secrets.CADDY_MERCURE_JWT_SECRET }}
-          APP_SECRET: ${{ secrets.APP_SECRET }}
-          DATABASE_URL: 'postgresql://app:${{ secrets.POSTGRES_PASSWORD }}!@database:5432/app?serverVersion=14&charset=utf8'
+          ENV_FILE: ${{ secrets.ENV_FILE }}
           DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
         with:
           host: ${{ vars.HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: HOST,APP_ENV,CADDY_MERCURE_JWT_SECRET,APP_SECRET,DATABASE_URL,DOCKER_REGISTRY
           script: |
             if [[ $(which docker) == "" ]]; then
               sudo apt-get update
@@ -49,5 +46,8 @@ jobs:
               sudo apt-get install -y docker-ce
               sudo apt-get install -y docker-compose
             fi
+            echo "${{ secrets.ENV_FILE }}" > /var/www/.env
+            echo "DOCKER_REGISTRY=${{ secrets.DOCKER_REGISTRY }}" >> /var/www/.env
+            source /var/www/.env
             cd /var/www && docker-compose -f docker-compose.yml -f docker-compose.prod.yml  pull && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --force-recreate -d 
             sudo docker image prune
