@@ -5,7 +5,7 @@ services:
     image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
     volumes:
       - uploads:/srv/app
-      - ./.env:/srv/app/.env.local:r
+      - ./.env:/srv/app/.env.local
     environment:
       APP_SECRET: ${APP_SECRET}
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET}
