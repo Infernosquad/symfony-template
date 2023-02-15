@@ -47,7 +47,20 @@
             <tr>
                 <td>Timezone</td>
                 <td>
-                    {{ tz }}
+                    {{ tz }} {{ 'now'|date('Y-m-d H:i:s') }}
+                </td>
+            </tr>
+            <tr>
+                <td>Upload</td>
+                <td>
+                    <form method="POST" enctype="multipart/form-data" action="/">
+                        <input type="file" name="upload">
+                        <input type="submit">
+
+                    </form>
+                    {% for file in files %}
+                        {{ file.filename }} {{ file.size }}
+                    {% endfor %}
                 </td>
             </tr>
         </table>
