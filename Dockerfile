@@ -43,7 +43,6 @@ RUN set -eux; \
 	mkdir -p var/cache var/log; \
     if [ -f composer.json ]; then \
 		composer dump-autoload --classmap-authoritative; \
-		composer dump-env prod; \
 		composer run-script post-install-cmd; \
 		chmod +x bin/console; sync; \
     fi

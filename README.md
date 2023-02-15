@@ -47,4 +47,5 @@ HOST=<your host>
 POSTGRES_PASSWORD=<your password>
 APP_SECRET=<your secret>
 CADDY_MERCURE_JWT_SECRET=<your-jwt-secret>
+TZ=<client timezone>
 ````
