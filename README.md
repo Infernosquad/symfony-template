@@ -35,7 +35,7 @@ Create SSH keys for the server and paste to github as SSH_KEY
 #### Add GITHUB_SECRETS
 
 Environment: `SSH_HOST, SSH_USER, SSH_KEY`
-Global: `DOCKER_REGISTRY, DOCKER_REGISTRY_USER, DOCKER_REGISTRY_PASSWORD`
+Global: `DOCKER_HOST, DOCKER_REGISTRY, DOCKER_REGISTRY_USER, DOCKER_REGISTRY_PASSWORD`
 
 #### Add Github Environment Variable
 
