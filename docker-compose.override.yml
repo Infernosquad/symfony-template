@@ -10,6 +10,7 @@ services:
       - ./docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
     environment:
       XDEBUG_MODE: "${XDEBUG_MODE:-off}"
+      TZ: ${TZ:-UTC}
     extra_hosts:
       - host.docker.internal:host-gateway
   workers:
@@ -21,6 +22,8 @@ services:
       - ./docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
     extra_hosts:
       - host.docker.internal:host-gateway
+    environment:
+      TZ: ${TZ:-UTC}
   cron:
     build:
       context: .
@@ -31,6 +34,8 @@ services:
       - ./crontab.conf:/etc/cron.d/root:ro
     extra_hosts:
       - host.docker.internal:host-gateway
+    environment:
+      TZ: ${TZ:-UTC}
 
   caddy:
     build:

@@ -13,13 +13,14 @@ class MainController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(Request $request): Response
     {
+        $projectDir = $this->getParameter('kernel.project_dir');
         if($request->files->get('upload')){
-            $projectDir = $this->getParameter('kernel.project_dir');
             fwrite(fopen($projectDir.'/public/uploads/'.$request->files->get('upload')->getClientOriginalName(), 'w'), $request->files->get('upload')->getContent());
         }
-        $files = (new Finder())->in('uploads')->files();
+        $files = (new Finder())->in($projectDir.'/public/uploads/')->files();
         return $this->render('main/index.html.twig', [
             'tz' => date_default_timezone_get(),
+            'upload_limit' => ini_get('upload_max_filesize'),
             'files' => $files
         ]);
     }

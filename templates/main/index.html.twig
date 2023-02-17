@@ -56,6 +56,7 @@
                     <form method="POST" enctype="multipart/form-data" action="/">
                         <input type="file" name="upload">
                         <input type="submit">
+                        Max size: {{ upload_limit }}
 
                     </form>
                     {% for file in files %}

@@ -9,6 +9,7 @@ services:
     environment:
       APP_SECRET: ${APP_SECRET}
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET}
+      TZ: ${TZ:-UTC}
 
   caddy:
     image: ${DOCKER_REGISTRY}-caddy:${DOCKER_TAG:-latest}
@@ -25,11 +26,15 @@ services:
     deploy:
       mode: replicated
       replicas: 3
+    environment:
+      TZ: ${TZ:-UTC}
   cron:
     image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
     volumes:
       - uploads:/srv/app/public/uploads
       - ./.env:/srv/app/.env.local
+    environment:
+      TZ: ${TZ:-UTC}
 
 volumes:
   uploads:
