@@ -52,10 +52,6 @@ jobs:
         name: Docker test
         runs-on: ubuntu-latest
         needs: build
-
-        services:
-          caddy:
-            image: infernosquad/symfony-template-caddy:latest
         steps:
           - uses: actions/checkout@v3
           - name: Log in to Docker Hub
@@ -69,6 +65,8 @@ jobs:
               compose-file: |
                 docker-compose.yml
                 docker-compose.prod.yml
+              env:
+                DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
               down-flags: "--volumes"
               services: |
                 caddy
