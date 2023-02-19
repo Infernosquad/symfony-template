@@ -74,6 +74,9 @@ jobs:
               DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
               HOST: ''
               DOCKER_TAG: main
+          - name: Sleep for 15 seconds
+            run: sleep 15s
+            shell: bash
           - name: Run tests
             run: |
               docker-compose exec -T php composer test
