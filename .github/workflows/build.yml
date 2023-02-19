@@ -32,6 +32,14 @@ jobs:
                 push: true
                 tags: ${{ steps.meta_php.outputs.tags }}
                 labels: ${{ steps.meta_php.outputs.labels }}
+            - uses: addnab/docker-run-action@v3
+              with:
+                image: symfony_php:${{ steps.meta_php.outputs.labels }}
+                run: /usr/bin/composer test
+            - uses: addnab/docker-run-action@v3
+              with:
+                image: symfony_php:${{ steps.meta_php.outputs.labels }}
+                run: /usr/bin/composer test
             - name: Extract metadata (tags, labels) for Docker
               id: meta_caddy
               uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
