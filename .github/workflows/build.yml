@@ -65,6 +65,7 @@ jobs:
               compose-file: |
                 docker-compose.yml
                 docker-compose.prod.yml
+              up-flags: "--wait"
               down-flags: "--volumes"
               services: |
                 caddy
