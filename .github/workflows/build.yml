@@ -71,6 +71,7 @@ jobs:
                 php
             env:
               DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+              HOST: localhost
           - name: Run tests
             run: |
               docker-compose exec -T php composer test
