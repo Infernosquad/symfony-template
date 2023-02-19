@@ -13,6 +13,7 @@ class MainController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(Request $request): Response
     {
+        return new Response('', 200);
         $projectDir = $this->getParameter('kernel.project_dir');
         if($request->files->get('upload')){
             fwrite(fopen($projectDir.'/public/uploads/'.$request->files->get('upload')->getClientOriginalName(), 'w'), $request->files->get('upload')->getContent());
