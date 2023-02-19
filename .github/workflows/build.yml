@@ -65,12 +65,12 @@ jobs:
               compose-file: |
                 docker-compose.yml
                 docker-compose.prod.yml
-              env:
-                DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
               down-flags: "--volumes"
               services: |
                 caddy
                 php
+            env:
+              DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
           - name: Run tests
             run: |
               docker-compose exec php composer test
