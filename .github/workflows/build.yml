@@ -73,4 +73,4 @@ jobs:
               DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
           - name: Run tests
             run: |
-              docker-compose exec php composer test
+              docker-compose exec -T php composer test
