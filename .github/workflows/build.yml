@@ -54,7 +54,7 @@ jobs:
         needs: build
         services:
           caddy:
-            image: ${{ secrets.DOCKER_HOST }}/${{ secrets.DOCKER_REGISTRY }}-caddy:latest
+            image: "${{ secrets.DOCKER_HOST }}/${{ secrets.DOCKER_REGISTRY }}-caddy:latest"
         steps:
           - uses: addnab/docker-run-action@v3
             with:
