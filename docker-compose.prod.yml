@@ -8,6 +8,7 @@ services:
       - ./.env:/srv/app/.env.local
     environment:
       APP_SECRET: ${APP_SECRET}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET}
       TZ: ${TZ:-UTC}
 
@@ -28,6 +29,7 @@ services:
       replicas: 3
     environment:
       TZ: ${TZ:-UTC}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
   cron:
     image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
     volumes:
@@ -35,6 +37,7 @@ services:
       - ./.env:/srv/app/.env.local
     environment:
       TZ: ${TZ:-UTC}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
 volumes:
   uploads:

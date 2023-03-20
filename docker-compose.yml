@@ -61,7 +61,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data:rw
   redis:
-    image: redis
+    image: redis:${REDIS_VERSION:-7}-alpine
     restart: unless-stopped
     volumes:
       - redis_data:/data:rw

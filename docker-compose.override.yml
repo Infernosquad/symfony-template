@@ -59,4 +59,14 @@ services:
       target: symfony_node
     volumes:
       - ./:/srv/app
-    command: 'yarn encore dev --watch'
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "8001:8025"
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1350
