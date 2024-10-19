@@ -78,14 +78,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker compose up
-        run: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+        run: docker compose -f docker-compose.yml -f docker-compose.prod.yml up php caddy -d --wait
         env:
-          DOCKER_REGISTRY: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          DOCKER_REGISTRY: ${{ env.REGISTRY }}/infernosquad/symfony-template
           HOST: ''
           DOCKER_TAG: main
-      - name: Sleep for 15 seconds
-        run: sleep 15s
-        shell: bash
       - name: Run tests
         run: |
           docker-compose exec -T php composer test
