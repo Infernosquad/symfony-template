@@ -1,9 +1,6 @@
 name: Deploy
 
 on:
-  create:
-    tags:
-      - v*
   workflow_run:
     workflows: ["Build"]
     branches: [main]
@@ -15,7 +12,8 @@ jobs:
     name: Install docker and deploy
     runs-on: ubuntu-latest
     environment: production
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+#    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: false
     steps:
       - uses: actions/checkout@v2
       - name: copy file via ssh password
