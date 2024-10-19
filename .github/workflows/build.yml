@@ -74,7 +74,7 @@ jobs:
       - name: Log into registry ${{ env.REGISTRY }}
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker compose up
@@ -82,7 +82,7 @@ jobs:
         env:
           DOCKER_REGISTRY: ${{ env.REGISTRY }}
           HOST: ''
-          DOCKER_TAG: ${github.branch}
+          DOCKER_TAG: main
       - name: Sleep for 15 seconds
         run: sleep 15s
         shell: bash
