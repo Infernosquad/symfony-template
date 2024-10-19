@@ -82,9 +82,9 @@ jobs:
         env:
           DOCKER_REGISTRY: ${{ env.REGISTRY }}/infernosquad/symfony-template
           HOST: ''
-          DOCKER_TAG: main
+          DOCKER_TAG: ${{ github.ref_name }}
       - name: Run tests
         run: |
-          docker-compose exec -T php composer test
+          docker compose exec -T php composer test
 
 
