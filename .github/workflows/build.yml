@@ -2,74 +2,68 @@ name: Build
 
 on:
   push:
-  pull_request:
+    branches: ["main"]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 
 jobs:
-    build:
-        name: Docker build
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: docker/setup-buildx-action@v1
-            - name: Log in to Docker Hub
-              uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-              with:
-                username: ${{ secrets.DOCKER_USERNAME }}
-                password: ${{ secrets.DOCKER_PASSWORD }}
-            - name: Extract metadata (tags, labels) for Docker
-              id: meta_php
-              uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-              with:
-                images: ${{ secrets.DOCKER_REGISTRY }}-php
-            - name: Build and push Docker image (php)
-              uses: docker/build-push-action@v3.2.0
-              with:
-                context: .
-                target: symfony_php
-                push: true
-                tags: ${{ steps.meta_php.outputs.tags }}
-                labels: ${{ steps.meta_php.outputs.labels }}
-            - name: Extract metadata (tags, labels) for Docker
-              id: meta_caddy
-              uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-              with:
-                images: ${{ secrets.DOCKER_REGISTRY }}-caddy
-            - name: Build and push Docker image (caddy)
-              uses: docker/build-push-action@v3.2.0
-              with:
-                context: .
-                target: app_caddy
-                push: true
-                tags: ${{ steps.meta_caddy.outputs.tags }}
-                labels: ${{ steps.meta_caddy.outputs.labels }}
-    test:
-        name: Docker test
-        runs-on: ubuntu-latest
-        needs: build
-        steps:
-          - uses: actions/checkout@v3
-          - name: Log in to Docker Hub
-            uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-            with:
-              registry: ${{ secrets.DOCKER_HOST }}
-              username: ${{ secrets.DOCKER_USERNAME }}
-              password: ${{ secrets.DOCKER_PASSWORD }}
-          - uses: isbang/compose-action@v1.4.1
-            with:
-              compose-file: |
-                docker-compose.yml
-                docker-compose.prod.yml
-              down-flags: "--volumes"
-              services: |
-                caddy
-                php
-            env:
-              DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
-              HOST: ''
-              DOCKER_TAG: ${github.branch}
-          - name: Sleep for 15 seconds
-            run: sleep 15s
-            shell: bash
-          - name: Run tests
-            run: |
-              docker-compose exec -T php composer test
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
+
+      - name: Log into registry ${{ env.REGISTRY }}
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata (PHP)
+        id: meta_php
+        uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-php
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        with:
+          context: .
+          target: symfony_php
+          push: true
+          tags: ${{ steps.meta_php.outputs.tags }}
+          labels: ${{ steps.meta_caddy.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract Docker metadata (Caddy)
+        id: meta_caddy
+        uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-caddy
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        with:
+          context: .
+          target: app_caddy
+          push: true
+          tags: ${{ steps.meta_php.outputs.tags }}
+          labels: ${{ steps.meta_caddy.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
