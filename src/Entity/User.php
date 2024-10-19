@@ -35,7 +35,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Equatab
         return ['ROLE_USER'];
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         $this->password = null;
     }

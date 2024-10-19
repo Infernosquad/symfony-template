@@ -1,4 +1,4 @@
-FROM infernosquad/php:v0.2 AS symfony_php_build
+FROM infernosquad/php:v0.3 AS symfony_php_build
 
 ENV APP_ENV=prod
 WORKDIR /srv/app
