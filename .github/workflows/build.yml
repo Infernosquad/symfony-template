@@ -77,15 +77,8 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: isbang/compose-action@v1.4.1
-        with:
-          compose-file: |
-            docker-compose.yml
-            docker-compose.prod.yml
-          down-flags: "--volumes"
-          services: |
-            caddy
-            php
+      - name: Docker compose up
+        run: docker compose up -f docker-compose.yml -f docker-compose.prod.yml -d
         env:
           DOCKER_REGISTRY: ${{ env.REGISTRY }}
           HOST: ''
