@@ -78,7 +78,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker compose up
-        run: docker compose up -f docker-compose.yml -f docker-compose.prod.yml -d
+        run: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
         env:
           DOCKER_REGISTRY: ${{ env.REGISTRY }}
           HOST: ''
