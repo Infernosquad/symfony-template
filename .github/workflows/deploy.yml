@@ -45,8 +45,8 @@ jobs:
           envs: ENV_FILE,REGISTRY,IMAGE_NAME
           script: |
             cd ${{ env.FOLDER }}
-            chmod +x ./docker.sh
-            ./docker.sh
+            chmod +x ./docker/docker.sh
+            ./docker/docker.sh
             echo "${{ vars.ENV_FILE }}" > .env
             mv docker-compose.prod.yml docker-compose.override.yml
             echo "DOCKER_REGISTRY=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}" >> .env
