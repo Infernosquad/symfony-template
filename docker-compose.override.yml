@@ -44,27 +44,11 @@ services:
     volumes:
       - ./public:/srv/app/public:ro
       - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
-  database:
-    ports:
-      - "5432:5432"
   redis:
     ports:
       - "6379:6379"
-
-  node:
-    build:
-      context: .
-      target: symfony_node
-    volumes:
-      - ./:/srv/app
 
   mailhog:
     image: mailhog/mailhog:latest
     ports:
       - "8001:8025"
-
-networks:
-  default:
-    driver: bridge
-    driver_opts:
-      com.docker.network.driver.mtu: 1350
