@@ -19,9 +19,6 @@ jobs:
       id-token: write
 
     steps:
-      - name: Downcase REPO
-        run: |
-          echo "IMAGE_NAME=${IMAGE_NAME@L}" >> ${GITHUB_ENV}
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -73,6 +70,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Downcase REPO
+        run: |
+          echo "IMAGE_NAME=${IMAGE_NAME@L}" >> ${GITHUB_ENV}
       - uses: actions/checkout@v4
       - name: Log into registry ${{ env.REGISTRY }}
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
