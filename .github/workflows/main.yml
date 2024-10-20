@@ -95,7 +95,6 @@ jobs:
     name: Install docker and deploy
     runs-on: ubuntu-latest
     needs: test
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: downcase REPO
         run: |
