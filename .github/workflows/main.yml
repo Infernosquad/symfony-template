@@ -10,6 +10,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
   DOCKER_USERNAME: ${{ github.actor }}
   DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+  DOCKER_TAG: ${{ github.ref_name }}
 
 jobs:
   build:
@@ -87,7 +88,7 @@ jobs:
         env:
           DOCKER_REGISTRY: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           HOST: ''
-          DOCKER_TAG: ${{ github.ref_name }}
+          DOCKER_TAG: ${{ env.DOCKER_TAG }}
       - name: Run tests
         run: |
           docker compose exec -T php composer test
@@ -115,18 +116,22 @@ jobs:
           ENV_FILE: ${{ vars.ENV_FILE }}
           REGISTRY: ${{ env.REGISTRY }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          DOCKER_TAG: ${{ env.DOCKER_TAG }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: ENV_FILE,REGISTRY,IMAGE_NAME
+          envs: ENV_FILE,REGISTRY,IMAGE_NAME, DOCKER_TAG
           script: |
             cd ${{ env.FOLDER }}
-            chmod +x ./docker/docker.sh
-            ./docker/docker.sh
+            if [[ $(which docker) == "" ]]; then
+              chmod +x ./docker/docker.sh
+              ./docker/docker.sh
+            fi
             echo "${{ vars.ENV_FILE }}" > .env
             mv docker-compose.prod.yml docker-compose.override.yml
             echo "DOCKER_REGISTRY=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}" >> .env
+            echo "DOCKER_TAG=${{ env.DOCKER_TAG }}" >> .env
             echo "${{ env.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} --username ${{ env.DOCKER_USERNAME }} --password-stdin
             docker compose pull && docker compose up -d 
             sudo docker image prune -f
