@@ -19,6 +19,9 @@ jobs:
       id-token: write
 
     steps:
+      - name: Downcase REPO
+        run: |
+          echo "IMAGE_NAME=${IMAGE_NAME@L}" >> ${GITHUB_ENV}
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -80,7 +83,7 @@ jobs:
       - name: Docker compose up
         run: docker compose -f docker-compose.yml -f docker-compose.prod.yml up php caddy -d --wait
         env:
-          DOCKER_REGISTRY: ${{ env.REGISTRY }}/infernosquad/symfony-template
+          DOCKER_REGISTRY: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           HOST: ''
           DOCKER_TAG: ${{ github.ref_name }}
       - name: Run tests
