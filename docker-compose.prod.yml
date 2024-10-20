@@ -15,6 +15,7 @@ services:
     volumes:
       - uploads:/srv/app/public/uploads
     environment:
+      SERVER_NAME: ${HOST:-localhost, caddy:80}
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
   workers:
