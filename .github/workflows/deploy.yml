@@ -11,6 +11,8 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   FOLDER: /var/www
+  DOCKER_USERNAME: ${{ github.actor }}
+  DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   deploy:
@@ -50,6 +52,6 @@ jobs:
             echo "${{ vars.ENV_FILE }}" > .env
             mv docker-compose.prod.yml docker-compose.override.yml
             echo "DOCKER_REGISTRY=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}" >> .env
-            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            echo "${{ env.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} --username ${{ env.DOCKER_USERNAME }} --password-stdin
             docker compose pull && docker compose up -d 
             sudo docker image prune -f
