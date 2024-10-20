@@ -132,6 +132,7 @@ jobs:
             mv docker-compose.prod.yml docker-compose.override.yml
             echo "DOCKER_REGISTRY=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}" >> .env
             echo "DOCKER_TAG=${{ env.DOCKER_TAG }}" >> .env
+            source .env
             echo "${{ env.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} --username ${{ env.DOCKER_USERNAME }} --password-stdin
             docker compose pull && docker compose up -d 
             sudo docker image prune -f
