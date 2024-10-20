@@ -5,12 +5,11 @@
 
 This template includes following features:
 
-* Symfony 6
+* Symfony 7
 * Caddy server with automatic HTTPS
 * Redis sessions
 * PostgresSQL
 * Docker
-* Deployment using Docker Machine
 * Symfony Mercure (Real Time Pushing Capabilities)
 * Symfony Messenger (Asyncronous Workers using Redis Pub/Sub)
 * Symfony Mailer Asynchronous
@@ -24,7 +23,7 @@ This template includes following features:
 
 ## Deployment
 
-Tested with Ubuntu 22.04. These steps are required to do only once. After that code will be deployed automatically on push to main branch.
+These steps are required to do only once. After that code will be deployed automatically on push to main branch.
 
 Create SSH keys for the server and paste to github as SSH_KEY
 
@@ -34,8 +33,7 @@ Create SSH keys for the server and paste to github as SSH_KEY
 
 #### Add GITHUB_SECRETS
 
-Environment: `SSH_HOST, SSH_USER, SSH_KEY`
-Global: `DOCKER_HOST, DOCKER_REGISTRY, DOCKER_REGISTRY_USER, DOCKER_REGISTRY_PASSWORD`
+Deploy: `SSH_HOST, SSH_USER, SSH_KEY`
 
 #### Add Github Environment Variable
 
