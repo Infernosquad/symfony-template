@@ -11,6 +11,7 @@ env:
   DOCKER_USERNAME: ${{ github.actor }}
   DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
   DOCKER_TAG: ${{ github.ref_name }}
+  DEPLOY: false
 
 jobs:
   build:
@@ -96,6 +97,7 @@ jobs:
     name: Install docker and deploy
     runs-on: ubuntu-latest
     needs: test
+    if: env.DEPLOY == 'true'
     steps:
       - name: downcase REPO
         run: |
