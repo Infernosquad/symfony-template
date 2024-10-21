@@ -5,11 +5,11 @@ on:
     branches: ["main"]
 
 env:
-  REGISTRY: ghcr.io
+  REGISTRY: ${{ secrets.REGISTRY || 'ghcr.io' }}
   FOLDER: /var/www
   IMAGE_NAME: ${{ github.repository }}
-  DOCKER_USERNAME: ${{ github.actor }}
-  DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME || github.actor }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD || secrets.GITHUB_TOKEN }}
   DOCKER_TAG: ${{ github.ref_name }}
   DEPLOY: false
 
