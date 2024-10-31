@@ -1,6 +1,6 @@
 ## Template for Production ready Symfony 6 application
 
-![ci](https://github.com/infernosquad/symfony-template/actions/workflows/ci.yml/badge.svg)
+![ci](https://github.com/infernosquad/symfony-template/actions/workflows/main.yml/badge.svg)
 
 
 This template includes following features:
