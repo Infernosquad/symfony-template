@@ -19,11 +19,6 @@ services:
       - php
     command: '/srv/app/bin/console messenger:consume async'
     restart: unless-stopped
-  cron:
-    command: 'crond -f -l 2 -L /dev/stdout'
-    depends_on:
-      - php
-    restart: unless-stopped
 
   caddy:
     depends_on:
@@ -32,6 +27,7 @@ services:
       SERVER_NAME: ${HOST:-localhost, caddy:80}
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
+      TZ: ${TZ:-UTC}
     restart: unless-stopped
     volumes:
       - php_socket:/var/run/php
@@ -55,6 +51,7 @@ services:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
     restart: unless-stopped
     environment:
+      TZ: ${TZ:-UTC}
       POSTGRES_DB: ${POSTGRES_DB:-app}
       # You should definitely change the password in production
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
@@ -71,6 +68,8 @@ services:
   redis:
     image: redis
     restart: unless-stopped
+    environment:
+      TZ: ${TZ:-UTC}
     volumes:
       - redis_data:/data:rw
     healthcheck:

@@ -12,6 +12,7 @@ env:
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD || secrets.GITHUB_TOKEN }}
   DOCKER_TAG: ${{ github.ref_name }}
   DEPLOY: false
+  TZ: UTC
 
 jobs:
   build:
@@ -52,6 +53,8 @@ jobs:
           labels: ${{ steps.meta_php.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args:
+            TZ: ${{ env.TZ }}
 
       - name: Extract Docker metadata (Caddy)
         id: meta_caddy
@@ -69,6 +72,8 @@ jobs:
           labels: ${{ steps.meta_caddy.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args:
+            TZ: ${{ env.TZ }}
   test:
     name: Run Codeception tests
     runs-on: ubuntu-latest
@@ -134,6 +139,7 @@ jobs:
             mv docker-compose.prod.yml docker-compose.override.yml
             echo "DOCKER_REGISTRY=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}" >> .env
             echo "DOCKER_TAG=${{ env.DOCKER_TAG }}" >> .env
+            echo "TZ=${{ env.TZ }}" >> .env
             source .env
             echo "${{ env.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} --username ${{ env.DOCKER_USERNAME }} --password-stdin
             docker compose pull && docker compose up -d 

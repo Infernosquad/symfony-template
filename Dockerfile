@@ -1,11 +1,15 @@
 FROM infernosquad/php:v0.3 AS symfony_php_build
 
+ARG TZ
 ENV APP_ENV=prod
+ENV TZ $TZ
 WORKDIR /srv/app
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY  docker/php/conf.d/app.ini $PHP_INI_DIR/conf.d/
 COPY  docker/php/conf.d/app.prod.ini $PHP_INI_DIR/conf.d/
 COPY  docker/php/php-fpm.d/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
+RUN apk add --no-cache tzdata
+RUN echo date.timezone = $TZ > $PHP_INI_DIR/conf.d/tzone.ini
 COPY crontab.conf /etc/cron.d/root
 RUN crontab -u root /etc/cron.d/root
 
@@ -56,5 +60,6 @@ RUN rm -f .env.local.php
 # Caddy image
 FROM infernosquad/caddy:v0.1 AS app_caddy
 WORKDIR /srv/app
+RUN apk add --no-cache tzdata
 COPY --from=symfony_php  /srv/app/public public/
 COPY docker/caddy/Caddyfile /etc/caddy/Caddyfile

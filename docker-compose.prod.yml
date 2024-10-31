@@ -29,14 +29,6 @@ services:
     environment:
       TZ: ${TZ:-UTC}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  cron:
-    image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
-    volumes:
-      - uploads:/srv/app/public/uploads
-      - ./.env:/srv/app/.env.local
-    environment:
-      TZ: ${TZ:-UTC}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
 volumes:
   uploads:
