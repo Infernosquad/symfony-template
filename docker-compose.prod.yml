@@ -15,20 +15,14 @@ services:
     volumes:
       - uploads:/srv/app/public/uploads
     environment:
-      SERVER_NAME: ${HOST:-localhost, caddy:80}
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
-  workers:
-    image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
-    volumes:
-      - uploads:/srv/app/public/uploads
-      - ./.env:/srv/app/.env.local
-    deploy:
-      mode: replicated
-      replicas: 3
-    environment:
-      TZ: ${TZ:-UTC}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${DOCKER_REGISTRY}-caddy.rule=Host(`${HOST:-localhost}`)"
+      - "traefik.http.routers.${DOCKER_REGISTRY}-caddy.entrypoints=websecure"
+      - "traefik.http.routers.${DOCKER_REGISTRY}-caddy.tls.certresolver=myresolver"
+      - "traefik.http.services.${DOCKER_REGISTRY}-caddy.loadbalancer.server.port=80"
 
 volumes:
   uploads:

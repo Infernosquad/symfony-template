@@ -1,11 +1,4 @@
-{
-    # Debug
-    {$CADDY_DEBUG}
-}
-
-{$SERVER_NAME}
-
-{$CADDY_EXTRA_CONFIG}
+localhost
 
 log
 
@@ -22,8 +15,6 @@ route {
         anonymous
         # Enable the subscription API (double-check that it's what you want)
         subscriptions
-        # Extra directives
-        {$MERCURE_EXTRA_DIRECTIVES}
     }
     vulcain
     push

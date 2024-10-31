@@ -14,11 +14,6 @@ services:
       timeout: 3s
       retries: 3
       start_period: 30s
-  workers:
-    depends_on:
-      - php
-    command: '/srv/app/bin/console messenger:consume async'
-    restart: unless-stopped
 
   caddy:
     depends_on:
@@ -33,19 +28,6 @@ services:
       - php_socket:/var/run/php
       - caddy_data:/data
       - caddy_config:/config
-    ports:
-      # HTTP
-      - target: 80
-        published: ${HTTP_PORT:-80}
-        protocol: tcp
-      # HTTPS
-      - target: 443
-        published: ${HTTPS_PORT:-443}
-        protocol: tcp
-      # HTTP/3
-      - target: 443
-        published: ${HTTP3_PORT:-443}
-        protocol: udp
 
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
@@ -58,8 +40,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-app}
     volumes:
       - db_data:/var/lib/postgresql/data:rw
-    ports:
-      - "5432:5432"
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 5s

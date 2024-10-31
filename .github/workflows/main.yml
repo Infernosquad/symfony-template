@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main","staging" ]
 
 env:
   REGISTRY: ${{ secrets.REGISTRY || 'ghcr.io' }}
@@ -98,49 +98,3 @@ jobs:
       - name: Run tests
         run: |
           docker compose exec -T php composer test
-  deploy:
-    name: Install docker and deploy
-    runs-on: ubuntu-latest
-    needs: test
-    if: github.env.DEPLOY == 'true'
-    steps:
-      - name: downcase REPO
-        run: |
-          echo "IMAGE_NAME=${IMAGE_NAME@L}" >> ${GITHUB_ENV}
-      - uses: actions/checkout@v2
-      - name: copy file via ssh password
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          source: "docker-compose.yml,docker-compose.prod.yml,docker/docker.sh"
-          target: ${{ env.FOLDER }}
-      - name: Deploy using Docker Compose
-        uses: appleboy/ssh-action@v0.1.6
-        env:
-          ENV_FILE: ${{ vars.ENV_FILE }}
-          REGISTRY: ${{ env.REGISTRY }}
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          DOCKER_TAG: ${{ env.DOCKER_TAG }}
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          envs: ENV_FILE,REGISTRY,IMAGE_NAME, DOCKER_TAG
-          script: |
-            cd ${{ env.FOLDER }}
-            if [[ $(which docker) == "" ]]; then
-              chmod +x ./docker/docker.sh
-              ./docker/docker.sh
-            fi
-            echo "${{ vars.ENV_FILE }}" > .env
-            mv docker-compose.prod.yml docker-compose.override.yml
-            echo "DOCKER_REGISTRY=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}" >> .env
-            echo "DOCKER_TAG=${{ env.DOCKER_TAG }}" >> .env
-            echo "TZ=${{ env.TZ }}" >> .env
-            source .env
-            echo "${{ env.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} --username ${{ env.DOCKER_USERNAME }} --password-stdin
-            docker compose pull && docker compose up -d 
-            sudo docker image prune -f

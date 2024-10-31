@@ -31,12 +31,18 @@ services:
       target: app_caddy
     environment:
       SERVER_NAME: ":80"
+      TZ: ${TZ:-UTC}
+    ports:
+      - "80:80"
     volumes:
       - ./public:/srv/app/public:ro
       - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
   redis:
     ports:
       - "6379:6379"
+  database:
+    ports:
+      - "5432:5432"
 
   mailhog:
     image: mailhog/mailhog:latest
