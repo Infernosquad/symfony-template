@@ -58,7 +58,7 @@ RUN set -eux; \
 RUN rm -f .env.local.php
 
 # Caddy image
-FROM infernosquad/caddy:v0.1 AS app_caddy
+FROM infernosquad/caddy:v0.2 AS app_caddy
 WORKDIR /srv/app
 RUN apk add --no-cache tzdata
 COPY --from=symfony_php  /srv/app/public public/

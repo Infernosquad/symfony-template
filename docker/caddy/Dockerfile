@@ -1,4 +1,4 @@
-FROM caddy:2.6-builder-alpine
+FROM caddy:2.8.4-builder-alpine
 RUN xcaddy build \
 	--with github.com/dunglas/mercure \
 	--with github.com/dunglas/mercure/caddy \
