@@ -25,7 +25,7 @@ jobs:
   deploy:
     name: Install docker and deploy
     runs-on: ubuntu-latest
-    if: github.ref_name == 'staging'
+    if: github.ref_name == 'staging' && github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Downcase REPO
         run: |
