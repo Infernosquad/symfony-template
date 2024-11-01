@@ -1,6 +1,5 @@
 services:
   php:
-    user: "${UID:-1000}:${GID:-1000}"
     depends_on:
       redis:
         condition: service_healthy
