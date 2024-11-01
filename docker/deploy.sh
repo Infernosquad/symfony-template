@@ -1,5 +1,4 @@
 #!/bin/bash
-source .env.deploy
 set -e
 
 # Install docker
