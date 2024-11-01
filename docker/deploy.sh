@@ -48,7 +48,7 @@ source .env
 echo "Pull docker image"
 echo "$DOCKER_PASSWORD" | docker login "$REGISTRY" --username "$DOCKER_USERNAME" --password-stdin
 docker compose pull && docker compose up -d
-sudo docker image prune -f
+sudo docker image prune -f || true
 echo "Docker image pulled"
 sudo chmod -R a+rw $PROJECT_FOLDER/uploads
 echo "Deploy completed"
