@@ -17,7 +17,7 @@ echo "Traefik installation"
 mkdir -p $TRAEFIK_FOLDER
 mv -f $PROJECT_FOLDER/docker-compose.traefik.yml $TRAEFIK_FOLDER/docker-compose.yml
 cd $TRAEFIK_FOLDER
-docker-compose up -d --wait
+docker compose up -d --wait
 echo "Traefik installation end"
 
 # Deploy
