@@ -64,5 +64,6 @@ jobs:
             export GITHUB_DOCKER_TAG=${DOCKER_TAG}
             export GITHUB_DOCKER_USERNAME=${DOCKER_USERNAME}
             export GITHUB_DOCKER_PASSWORD=${DOCKER_PASSWORD}
+            echo $GITHUB_ENV_FILE
             chmod +x ./deploy.sh
             ./deploy.sh
