@@ -43,11 +43,12 @@ echo "DOCKER_TAG=$DOCKER_TAG" >> .env
 echo "TZ=$TZ" >> .env
 echo "APP_NAME=$APP_NAME" >> .env
 source .env
-sudo chmod -R a+rw $PROJECT_FOLDER/uploads
 
 
 echo "Pull docker image"
 echo "$DOCKER_PASSWORD" | docker login "$REGISTRY" --username "$DOCKER_USERNAME" --password-stdin
 docker compose pull && docker compose up -d
 sudo docker image prune -f
+echo "Docker image pulled"
+sudo chmod -R a+rw $PROJECT_FOLDER/uploads
 echo "Deploy completed"
