@@ -19,6 +19,7 @@ services:
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
       - "traefik.http.routers.${APP_NAME}.rule=Host(`${HOST:-localhost}`)"
       - "traefik.http.routers.${APP_NAME}.entrypoints=websecure"
       - "traefik.http.routers.${APP_NAME}.tls.certresolver=myresolver"
