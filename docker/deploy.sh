@@ -14,7 +14,7 @@ fi
 echo "Traefik installation"
 mkdir -p /var/www/traefik
 cd /var/www/traefik
-mv -f "$PROJECT_FOLDER"/docker-compose.traefik.yml /var/www/traefik/docker-compose.yml
+mv -f $PROJECT_FOLDER/docker-compose.traefik.yml /var/www/traefik/docker-compose.yml
 cd ../traefik && docker-compose up -d --wait
 echo "Traefik installation end"
 
