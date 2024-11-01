@@ -3,10 +3,10 @@ name: Deploy Staging
 on:
   push:
     branches: ["staging"]
-#  workflow_run:
-#    workflows: ["Build"]
-#    types:
-#      - completed
+  workflow_run:
+    workflows: ["Build"]
+    types:
+      - completed
 
 env:
   APP_NAME: staging
