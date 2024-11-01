@@ -56,6 +56,7 @@ jobs:
           key: ${{ env.SSH_KEY }}
           envs: ENV_FILE,REGISTRY,IMAGE_NAME,DOCKER_TAG,DOCKER_USERNAME,DOCKER_PASSWORD,PROJECT_FOLDER
           script: |
+            echo "PROJECT_FOLDER=${PROJECT_FOLDER}"
             cd ${{ env.FOLDER }}/docker
             chmod +x ./deploy.sh
             ./deploy.sh
