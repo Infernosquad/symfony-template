@@ -21,6 +21,7 @@ env:
   ENV_FILE: ${{ vars.ENV_FILE || '' }}
   DEPLOY: true
   TZ: UTC
+  APP_NAME: prod
 
 jobs:
   deploy:
@@ -50,12 +51,13 @@ jobs:
           DOCKER_TAG: ${{ env.DOCKER_TAG }}
           DOCKER_USERNAME: ${{ env.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ env.DOCKER_PASSWORD }}
+          APP_NAME: ${{ env.APP_NAME }}
         with:
           host: ${{ env.SSH_HOST }}
           username: ${{ env.SSH_USER }}
           key: ${{ env.SSH_KEY }}
           debug: true
-          envs: ENV_FILE,REGISTRY,IMAGE_NAME,DOCKER_TAG,DOCKER_USERNAME,DOCKER_PASSWORD,PROJECT_FOLDER
+          envs: ENV_FILE,REGISTRY,IMAGE_NAME,DOCKER_TAG,DOCKER_USERNAME,DOCKER_PASSWORD,PROJECT_FOLDER,APP_NAME
           script: |
             cd ${{ env.FOLDER }}/docker
             export ENV_FILE=$ENV_FILE
@@ -65,6 +67,6 @@ jobs:
             export DOCKER_TAG=$DOCKER_TAG
             export DOCKER_USERNAME=$DOCKER_USERNAME
             export DOCKER_PASSWORD=$DOCKER_PASSWORD
-            echo $PROJECT_FOLDER >> .env.deploy
+            export APP_NAME=$APP_NAME
             chmod +x ./deploy.sh
             ./deploy.sh

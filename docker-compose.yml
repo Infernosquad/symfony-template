@@ -14,10 +14,14 @@ services:
       timeout: 3s
       retries: 3
       start_period: 30s
+    networks:
+      - default
 
   caddy:
     depends_on:
       - php
+    networks:
+      - default
     environment:
       SERVER_NAME: ${HOST:-localhost, caddy:80}
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
@@ -32,6 +36,8 @@ services:
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
     restart: unless-stopped
+    networks:
+      - default
     environment:
       TZ: ${TZ:-UTC}
       POSTGRES_DB: ${POSTGRES_DB:-app}
@@ -60,3 +66,8 @@ volumes:
   caddy_data:
   caddy_config:
   redis_data:
+
+networks:
+    default:
+        external:
+          name: traefik

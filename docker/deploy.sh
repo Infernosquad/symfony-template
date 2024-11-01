@@ -22,6 +22,9 @@ else
   echo "Docker already installed"
 fi
 
+# Install traefik network
+docker network create traefik || true
+
 # Install traefik
 echo "Traefik installation"
 mkdir -p $TRAEFIK_FOLDER
@@ -38,6 +41,7 @@ mv docker-compose.prod.yml docker-compose.override.yml
 echo "DOCKER_REGISTRY=$REGISTRY/$IMAGE_NAME" >> .env
 echo "DOCKER_TAG=$DOCKER_TAG" >> .env
 echo "TZ=$TZ" >> .env
+echo "APP_NAME=$APP_NAME" >> .env
 source .env
 echo "$DOCKER_PASSWORD" | docker login "$REGISTRY" --username "$DOCKER_USERNAME" --password-stdin
 docker compose pull && docker compose up -d

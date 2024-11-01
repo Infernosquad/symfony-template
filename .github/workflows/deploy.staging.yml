@@ -21,6 +21,7 @@ env:
   ENV_FILE: ${{ vars.ENV_FILE || vars.ENV_FILE_STAGING || '' }}
   DEPLOY: true
   TZ: UTC
+  APP_NAME: staging
 
 jobs:
   deploy:
