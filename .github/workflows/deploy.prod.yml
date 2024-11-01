@@ -41,7 +41,7 @@ jobs:
           source: "docker-compose.yml,docker-compose.prod.yml,docker-compose.traefik.yml,docker/docker.sh, docker/deploy.sh"
           target: ${{ env.FOLDER }}
       - name: Deploy using Docker Compose
-        uses: appleboy/ssh-action@v0.1.6
+        uses: appleboy/ssh-action@v1.1.0
         env:
           ENV_FILE: ${{ env.ENV_FILE }}
           PROJECT_FOLDER: ${{ env.FOLDER }}
@@ -54,9 +54,15 @@ jobs:
           host: ${{ env.SSH_HOST }}
           username: ${{ env.SSH_USER }}
           key: ${{ env.SSH_KEY }}
-          envs: ENV_FILE,REGISTRY,IMAGE_NAME,DOCKER_TAG,DOCKER_USERNAME,DOCKER_PASSWORD,PROJECT_FOLDER
+          allenvs: true
           script: |
             cd ${{ env.FOLDER }}/docker
-            export > .env.deploy
+            export GITHUB_ENV_FILE=${ENV_FILE}
+            export GITHUB_PROJECT_FOLDER=${PROJECT_FOLDER}
+            export GITHUB_REGISTRY=${REGISTRY}
+            export GITHUB_IMAGE_NAME=${IMAGE_NAME}
+            export GITHUB_DOCKER_TAG=${DOCKER_TAG}
+            export GITHUB_DOCKER_USERNAME=${DOCKER_USERNAME}
+            export GITHUB_DOCKER_PASSWORD=${DOCKER_PASSWORD}
             chmod +x ./deploy.sh
             ./deploy.sh
