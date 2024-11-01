@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.env.DEPLOY == 'true'
     steps:
-      - name: downcase REPO
+      - name: Downcase REPO
         run: |
           echo "IMAGE_NAME=${IMAGE_NAME@L}" >> ${GITHUB_ENV}
       - uses: actions/checkout@v2
@@ -39,35 +39,24 @@ jobs:
           username: ${{ env.SSH_USER }}
           key: ${{ env.SSH_KEY }}
           port: 22
-          source: "docker-compose.yml,docker-compose.prod.yml,docker-compose.traefik.yml,docker/docker.sh"
+          source: "docker-compose.yml,docker-compose.prod.yml,docker/docker.sh, docker/deploy.sh"
           target: ${{ env.FOLDER }}
       - name: Deploy using Docker Compose
         uses: appleboy/ssh-action@v0.1.6
         env:
           ENV_FILE: ${{ env.ENV_FILE }}
+          PROJECT_FOLDER: ${{ env.FOLDER }}
           REGISTRY: ${{ env.REGISTRY }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           DOCKER_TAG: ${{ env.DOCKER_TAG }}
+          DOCKER_USERNAME: ${{ env.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ env.DOCKER_PASSWORD }}
         with:
           host: ${{ env.SSH_HOST }}
           username: ${{ env.SSH_USER }}
           key: ${{ env.SSH_KEY }}
           envs: ENV_FILE,REGISTRY,IMAGE_NAME,DOCKER_TAG
           script: |
-            if [[ $(which docker) == "" ]]; then
-              chmod +x ./docker/docker.sh
-              ./docker/docker.sh
-            fi
             cd ${{ env.FOLDER }}
-            mv docker-compose.traefik.yml ../traefik/docker-compose.yml
-            cd ../traefik && docker-compose up -d --wait
-            cd ${{ env.FOLDER }}
-            echo "${{ env.ENV_FILE }}" > .env
-            mv docker-compose.prod.yml docker-compose.override.yml
-            echo "DOCKER_REGISTRY=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}" >> .env
-            echo "DOCKER_TAG=${{ env.DOCKER_TAG }}" >> .env
-            echo "TZ=${{ env.TZ }}" >> .env
-            source .env
-            echo "${{ env.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} --username ${{ env.DOCKER_USERNAME }} --password-stdin
-            docker compose pull && docker compose up -d 
-            sudo docker image prune -f
+            chmod +x deploy.sh
+            ./deploy.sh
