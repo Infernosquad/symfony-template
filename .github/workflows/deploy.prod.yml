@@ -25,6 +25,7 @@ jobs:
   deploy:
     name: Install docker and deploy
     runs-on: ubuntu-latest
+    if: github.ref_name == 'staging'
     steps:
       - name: Downcase REPO
         run: |

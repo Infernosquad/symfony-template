@@ -3,7 +3,7 @@ set -e
 
 TRAEFIK_FOLDER="/var/www/traefik"
 
-# Install docker
+# Install firewall
 echo "Install firewall rules"
 sudo ufw --force enable
 sudo ufw allow 80
