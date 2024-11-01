@@ -4,8 +4,8 @@ set -e
 # Install docker
 echo "Install docker"
 if [[ $(which docker) == "" ]]; then
-  chmod +x ./docker/docker.sh
-  ./docker/docker.sh
+  chmod +x ./docker.sh
+  ./docker.sh
 else
   echo "Docker already installed"
 fi
