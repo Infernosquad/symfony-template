@@ -43,7 +43,7 @@ echo "DOCKER_TAG=$DOCKER_TAG" >> .env
 echo "TZ=$TZ" >> .env
 echo "APP_NAME=$APP_NAME" >> .env
 source .env
-sudo chown -R www-data:www-data $PROJECT_FOLDER/uploads
+sudo chmod -R a+rw $PROJECT_FOLDER/uploads
 
 
 echo "Pull docker image"

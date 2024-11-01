@@ -10,9 +10,6 @@ COPY  docker/php/conf.d/app.prod.ini $PHP_INI_DIR/conf.d/
 COPY  docker/php/php-fpm.d/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 RUN apk add --no-cache tzdata
 RUN echo date.timezone = $TZ > $PHP_INI_DIR/conf.d/tzone.ini
-RUN usermod -u 1000 www-data
-RUN groupmod -g 1000 www-data
-
 
 COPY composer.* symfony.* ./
 RUN set -eux; \
