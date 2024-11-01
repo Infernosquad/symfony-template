@@ -56,6 +56,6 @@ jobs:
           key: ${{ env.SSH_KEY }}
           envs: ENV_FILE,REGISTRY,IMAGE_NAME,DOCKER_TAG
           script: |
-            cd ${{ env.FOLDER }}
-            chmod +x deploy.sh
+            cd ${{ env.FOLDER }}/docker
+            chmod +x ./deploy.sh
             ./deploy.sh
