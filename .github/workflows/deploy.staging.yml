@@ -27,7 +27,6 @@ jobs:
   deploy:
     name: Install docker and deploy
     runs-on: ubuntu-latest
-    if: github.env.SSH_HOST != '' && github.env.DEPLOY == 'true'
     steps:
       - name: Downcase REPO
         run: |
@@ -40,10 +39,10 @@ jobs:
           username: ${{ env.SSH_USER }}
           key: ${{ env.SSH_KEY }}
           port: 22
-          source: "docker-compose.yml,docker-compose.prod.yml,docker/docker.sh, docker/deploy.sh"
+          source: "docker-compose.yml,docker-compose.prod.yml,docker-compose.traefik.yml,docker/docker.sh, docker/deploy.sh"
           target: ${{ env.FOLDER }}
       - name: Deploy using Docker Compose
-        uses: appleboy/ssh-action@v0.1.6
+        uses: appleboy/ssh-action@v1.1.0
         env:
           ENV_FILE: ${{ env.ENV_FILE }}
           PROJECT_FOLDER: ${{ env.FOLDER }}
@@ -52,12 +51,22 @@ jobs:
           DOCKER_TAG: ${{ env.DOCKER_TAG }}
           DOCKER_USERNAME: ${{ env.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ env.DOCKER_PASSWORD }}
+          APP_NAME: ${{ env.APP_NAME }}
         with:
           host: ${{ env.SSH_HOST }}
           username: ${{ env.SSH_USER }}
           key: ${{ env.SSH_KEY }}
-          envs: ENV_FILE,REGISTRY,IMAGE_NAME,DOCKER_TAG
+          debug: true
+          envs: ENV_FILE,REGISTRY,IMAGE_NAME,DOCKER_TAG,DOCKER_USERNAME,DOCKER_PASSWORD,PROJECT_FOLDER,APP_NAME
           script: |
-            cd ${{ env.FOLDER }}
-            chmod +x deploy.sh
+            cd ${{ env.FOLDER }}/docker
+            export ENV_FILE=$ENV_FILE
+            export PROJECT_FOLDER=$PROJECT_FOLDER
+            export REGISTRY=$REGISTRY
+            export IMAGE_NAME=$IMAGE_NAME
+            export DOCKER_TAG=$DOCKER_TAG
+            export DOCKER_USERNAME=$DOCKER_USERNAME
+            export DOCKER_PASSWORD=$DOCKER_PASSWORD
+            export APP_NAME=$APP_NAME
+            chmod +x ./deploy.sh
             ./deploy.sh
