@@ -55,15 +55,16 @@ jobs:
           username: ${{ env.SSH_USER }}
           key: ${{ env.SSH_KEY }}
           allenvs: true
+          debug: true
           script: |
             cd ${{ env.FOLDER }}/docker
-            export GITHUB_ENV_FILE=${ENV_FILE}
-            export GITHUB_PROJECT_FOLDER=${PROJECT_FOLDER}
-            export GITHUB_REGISTRY=${REGISTRY}
-            export GITHUB_IMAGE_NAME=${IMAGE_NAME}
-            export GITHUB_DOCKER_TAG=${DOCKER_TAG}
-            export GITHUB_DOCKER_USERNAME=${DOCKER_USERNAME}
-            export GITHUB_DOCKER_PASSWORD=${DOCKER_PASSWORD}
-            echo $GITHUB_ENV_FILE
+            export ENV_FILE=${ENV_FILE}
+            export PROJECT_FOLDER=${PROJECT_FOLDER}
+            export REGISTRY=${REGISTRY}
+            export IMAGE_NAME=${IMAGE_NAME}
+            export DOCKER_TAG=${DOCKER_TAG}
+            export DOCKER_USERNAME=${DOCKER_USERNAME}
+            export DOCKER_PASSWORD=${DOCKER_PASSWORD}
+            echo $PROJECT_FOLDER
             chmod +x ./deploy.sh
             ./deploy.sh
