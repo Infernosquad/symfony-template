@@ -9,6 +9,7 @@ on:
 #      - completed
 
 env:
+  APP_NAME: staging
   REGISTRY: ${{ secrets.REGISTRY || 'ghcr.io' }}
   FOLDER: /var/www/staging
   IMAGE_NAME: ${{ github.repository }}
@@ -21,7 +22,6 @@ env:
   ENV_FILE: ${{ vars.ENV_FILE || vars.ENV_FILE_STAGING || '' }}
   DEPLOY: true
   TZ: UTC
-  APP_NAME: staging
 
 jobs:
   deploy:

@@ -9,6 +9,7 @@ on:
 #      - completed
 
 env:
+  APP_NAME: prod
   REGISTRY: ${{ secrets.REGISTRY || 'ghcr.io' }}
   FOLDER: /var/www/prod
   IMAGE_NAME: ${{ github.repository }}
@@ -21,7 +22,6 @@ env:
   ENV_FILE: ${{ vars.ENV_FILE || '' }}
   DEPLOY: true
   TZ: UTC
-  APP_NAME: prod
 
 jobs:
   deploy:
