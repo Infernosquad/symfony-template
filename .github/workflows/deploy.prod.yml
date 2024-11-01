@@ -26,7 +26,6 @@ jobs:
   deploy:
     name: Install docker and deploy
     runs-on: ubuntu-latest
-    if: github.env.DEPLOY == 'true'
     steps:
       - name: Downcase REPO
         run: |
