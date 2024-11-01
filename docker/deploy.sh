@@ -4,6 +4,16 @@ set -e
 TRAEFIK_FOLDER="/var/www/traefik"
 
 # Install docker
+echo "Install firewall rules"
+sudo ufw --force enable
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw allow 8080
+sudo ufw allow 22
+echo "Firewall rules installed"
+
+
+# Install docker
 echo "Install docker"
 if [[ $(which docker) == "" ]]; then
   chmod +x ./docker.sh
