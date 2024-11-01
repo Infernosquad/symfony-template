@@ -55,6 +55,7 @@ jobs:
           username: ${{ env.SSH_USER }}
           key: ${{ env.SSH_KEY }}
           debug: true
+          envs: ENV_FILE,REGISTRY,IMAGE_NAME,DOCKER_TAG,DOCKER_USERNAME,DOCKER_PASSWORD,PROJECT_FOLDER
           script: |
             cd ${{ env.FOLDER }}/docker
             export ENV_FILE=$ENV_FILE
