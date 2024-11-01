@@ -19,14 +19,13 @@ env:
   SSH_USER: ${{ secrets.SSH_USER }}
   SSH_KEY: ${{ secrets.SSH_KEY }}
   ENV_FILE: ${{ vars.ENV_FILE || '' }}
-  DEPLOY: false
   TZ: UTC
 
 jobs:
   deploy:
     name: Install docker and deploy
     runs-on: ubuntu-latest
-    if: github.env.DEPLOY == 'true'
+    if: github.env.SSH_HOST
     steps:
       - name: Downcase REPO
         run: |
