@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+TRAEFIK_FOLDER="/var/www/traefik"
+
 # Install docker
 echo "Install docker"
 if [[ $(which docker) == "" ]]; then
@@ -12,10 +14,10 @@ fi
 
 # Install traefik
 echo "Traefik installation"
-mkdir -p /var/www/traefik
-cd /var/www/traefik
-mv -f $PROJECT_FOLDER/docker-compose.traefik.yml /var/www/traefik/docker-compose.yml
-cd ../traefik && docker-compose up -d --wait
+mkdir -p $TRAEFIK_FOLDER
+mv -f $PROJECT_FOLDER/docker-compose.traefik.yml $TRAEFIK_FOLDER/docker-compose.yml
+cd $TRAEFIK_FOLDER
+docker-compose up -d --wait
 echo "Traefik installation end"
 
 # Deploy
