@@ -54,17 +54,16 @@ jobs:
           host: ${{ env.SSH_HOST }}
           username: ${{ env.SSH_USER }}
           key: ${{ env.SSH_KEY }}
-          allenvs: true
           debug: true
           script: |
             cd ${{ env.FOLDER }}/docker
-            export ENV_FILE=${ENV_FILE}
-            export PROJECT_FOLDER=${PROJECT_FOLDER}
-            export REGISTRY=${REGISTRY}
-            export IMAGE_NAME=${IMAGE_NAME}
-            export DOCKER_TAG=${DOCKER_TAG}
-            export DOCKER_USERNAME=${DOCKER_USERNAME}
-            export DOCKER_PASSWORD=${DOCKER_PASSWORD}
-            echo $PROJECT_FOLDER
+            export ENV_FILE=$ENV_FILE
+            export PROJECT_FOLDER=$PROJECT_FOLDER
+            export REGISTRY=$REGISTRY
+            export IMAGE_NAME=$IMAGE_NAME
+            export DOCKER_TAG=$DOCKER_TAG
+            export DOCKER_USERNAME=$DOCKER_USERNAME
+            export DOCKER_PASSWORD=$DOCKER_PASSWORD
+            echo $PROJECT_FOLDER >> .env.deploy
             chmod +x ./deploy.sh
             ./deploy.sh
