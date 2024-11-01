@@ -38,7 +38,7 @@ jobs:
           username: ${{ env.SSH_USER }}
           key: ${{ env.SSH_KEY }}
           port: 22
-          source: "docker-compose.yml,docker-compose.prod.yml,docker/docker.sh, docker/deploy.sh"
+          source: "docker-compose.yml,docker-compose.prod.yml,docker-compose.traefik.yml,docker/docker.sh, docker/deploy.sh"
           target: ${{ env.FOLDER }}
       - name: Deploy using Docker Compose
         uses: appleboy/ssh-action@v0.1.6
