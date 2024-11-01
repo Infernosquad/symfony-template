@@ -17,7 +17,7 @@ use Twig\Environment;
 )]
 class TestCronCommand extends Command
 {
-    public function __construct(private readonly MessageBusInterface $bus, private readonly HubInterface $hub, private readonly Environment $twig)
+    public function __construct(private readonly MessageBusInterface $bus)
     {
         parent::__construct();
     }
