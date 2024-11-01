@@ -1,6 +1,8 @@
 services:
   php:
     image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
+    networks:
+      - default
     volumes:
       - ./uploads:/srv/app/public/uploads
       - ./.env:/srv/app/.env.local
