@@ -14,7 +14,7 @@ This template includes following features:
 * Symfony Messenger (Asyncronous Workers using Redis Pub/Sub)
 * Symfony Mailer Asynchronous
 * Symfony Webpack Encore
-* Cron Jobs Container
+* Scheduler
 * Codeception Testing
 
 ## Installation

@@ -3,6 +3,14 @@
 {% block title %}Hello MainController!{% endblock %}
 
 {% block body %}
+    <script>
+      window.addEventListener('load', () => {
+        const eventSource = new EventSource("{{ mercure('chat')|escape('js') }}");
+        eventSource.onmessage = event => {
+          document.getElementById('chat').innerHTML = event.data;
+        }
+      });
+    </script>
     <style>
         .example-wrapper {
             margin: 1em auto;
@@ -28,8 +36,7 @@
             <tr>
                 <td>Cron, mercure. Wait a minute to see any info in this column to check</td>
                 <td>
-                    <div id="chat" {{ turbo_stream_listen('chat') }}>
-
+                    <div id="chat">
                     </div>
                 </td>
             </tr>
@@ -65,8 +72,5 @@
                 </td>
             </tr>
         </table>
-        <h2 {{ turbo_stream_listen('chat') }}>
-
-        </h2>
     </div>
 {% endblock %}
