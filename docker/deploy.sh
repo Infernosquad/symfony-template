@@ -8,9 +8,15 @@ echo "Install firewall rules"
 sudo ufw --force enable
 sudo ufw allow 80
 sudo ufw allow 443
-sudo ufw allow 8080
+sudo ufw allow 8080 # Traefik
+sudo ufw allow 9100 # Monitoring
 sudo ufw allow 22
 echo "Firewall rules installed"
+
+#Install file2ban
+echo "Install fail2ban"
+sudo apt-get install -y fail2ban
+echo "Fail2ban installed"
 
 
 # Install docker
@@ -22,11 +28,20 @@ else
   echo "Docker already installed"
 fi
 
-# Install traefik network
-docker network create traefik || true
+# Install node exporter (Monitoring)
+echo "Install node exporter"
+if [[ $(which node_exporter) == "" ]]; then
+  chmod +x ./node_exporter.sh
+  ./node_exporter.sh
+else
+  echo "Node exporter already installed"
+fi
+
 
 # Install traefik
 echo "Traefik installation"
+# Install traefik network
+docker network create traefik || true
 mkdir -p $TRAEFIK_FOLDER
 mv -f $PROJECT_FOLDER/compose.traefik.yml $TRAEFIK_FOLDER/compose.yml
 cd $TRAEFIK_FOLDER
