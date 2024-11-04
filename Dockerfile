@@ -2,7 +2,7 @@ FROM infernosquad/php:v0.3 AS symfony_php_build
 
 ARG TZ
 ENV APP_ENV=prod
-ENV TZ $TZ
+ENV TZ=$TZ
 WORKDIR /srv/app
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY  docker/php/conf.d/app.ini $PHP_INI_DIR/conf.d/

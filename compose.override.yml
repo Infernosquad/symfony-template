@@ -8,11 +8,17 @@ services:
     volumes:
       - ./:/srv/app
       - ./docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
-    environment:
-      XDEBUG_MODE: "${XDEBUG_MODE:-off}"
-      TZ: ${TZ:-UTC}
     extra_hosts:
       - host.docker.internal:host-gateway
+  workers:
+    build:
+      context: .
+      target: symfony_php_dev
+      args:
+        TZ: ${TZ:-UTC}
+    volumes:
+      - ./:/srv/app
+      - ./docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
 
   caddy:
     build:
@@ -20,8 +26,11 @@ services:
       target: app_caddy
     environment:
       TZ: ${TZ:-UTC}
+      MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
+      MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./public:/srv/app/public:ro
   redis:

@@ -6,11 +6,14 @@ services:
     volumes:
       - ./uploads:/srv/app/public/uploads
       - ./.env:/srv/app/.env.local
-    environment:
-      APP_SECRET: ${APP_SECRET}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET}
-      TZ: ${TZ:-UTC}
+
+  workers:
+    image: ${DOCKER_REGISTRY}-php:${DOCKER_TAG:-latest}
+    networks:
+      - traefik
+    volumes:
+      - ./uploads:/srv/app/public/uploads
+      - ./.env:/srv/app/.env.local
 
   caddy:
     image: ${DOCKER_REGISTRY}-caddy:${DOCKER_TAG:-latest}
@@ -34,9 +37,6 @@ services:
   redis:
     networks:
       - traefik
-
-volumes:
-  uploads:
 
 networks:
   traefik:

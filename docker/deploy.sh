@@ -28,7 +28,7 @@ docker network create traefik || true
 # Install traefik
 echo "Traefik installation"
 mkdir -p $TRAEFIK_FOLDER
-mv -f $PROJECT_FOLDER/docker-compose.traefik.yml $TRAEFIK_FOLDER/docker-compose.yml
+mv -f $PROJECT_FOLDER/compose.traefik.yml $TRAEFIK_FOLDER/compose.yml
 cd $TRAEFIK_FOLDER
 docker compose up -d --wait
 echo "Traefik installation end"
@@ -37,7 +37,7 @@ echo "Traefik installation end"
 echo "Setup env variables"
 cd "$PROJECT_FOLDER"
 echo "$ENV_FILE" > .env
-mv docker-compose.prod.yml docker-compose.override.yml
+mv compose.prod.yml compose.override.yml
 echo "DOCKER_REGISTRY=$REGISTRY/$IMAGE_NAME" >> .env
 echo "DOCKER_TAG=$DOCKER_TAG" >> .env
 echo "TZ=$TZ" >> .env

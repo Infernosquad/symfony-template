@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "doctrine/annotations": "^2.0",
         "doctrine/doctrine-bundle": "^2.7",
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.3",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -33,6 +34,7 @@
         "symfony/property-info": "7.1.*",
         "symfony/redis-messenger": "7.1.*",
         "symfony/runtime": "7.1.*",
+        "symfony/scheduler": "7.1.*",
         "symfony/security-bundle": "7.1.*",
         "symfony/serializer": "7.1.*",
         "symfony/string": "7.1.*",
@@ -44,8 +46,7 @@
         "symfony/webpack-encore-bundle": "^2.2",
         "symfony/yaml": "7.1.*",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0",
-        "doctrine/doctrine-fixtures-bundle": "^3.4"
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "codeception/codeception": "^5.0",
